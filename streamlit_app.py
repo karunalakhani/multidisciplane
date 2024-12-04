@@ -96,6 +96,7 @@ def query_model(workspace_name, message,input_data,anything_key):
     payload = {
         "message": message + " " + input_data,
         "mode": "chat"
+        
     }
     response = requests.post(url, headers=headers, json=payload)
     if response.status_code == 200:
@@ -106,11 +107,13 @@ def query_model(workspace_name, message,input_data,anything_key):
         return "Error querying the workspace." + response.json().get("error")
 
 # Step 4: Aggregate Responses
+# Step 4: Aggregate Responses
 def aggregate_responses(responses):
     """
     Aggregate responses from different specialists into a structured format.
     """
     aggregated = {"Responses": []}
+    
     for response in responses:
         aggregated["Responses"].append(response)
     return aggregated
@@ -181,7 +184,7 @@ def main():
             prompt = generate_specialist_prompt(specialty, input_prompt,user_prompt)
 
             response = query_model(specialty, prompt, input_prompt, api_key)
-            specialist_responses.append({"Specialty": specialty, "Response": response})
+            specialist_responses.append({"Specialty": specialty, "Response": response,"response":response})
 
         # Display responses from specialists
         col1, col2 = st.columns(2)
