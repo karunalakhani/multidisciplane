@@ -207,7 +207,7 @@ def main():
         with col2:
             st.subheader("Aggregated Response")
 
-            st.text_area("Aggregated Response", final_response, height=400)
+            st.markdown("Aggregated Response", final_response, height=400)
 
         # Option to download the aggregated response
         aggregated_json = json.dumps(final_response, indent=4)
