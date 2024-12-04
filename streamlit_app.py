@@ -222,47 +222,6 @@ def main():
 
             st.markdown(final_response)
     
-            # Generate and download PDF
-            if st.button("Download as PDF"):
-                try:
-                    # Convert Markdown to HTML
-                    html_content = markdown.markdown(final_response)
-                    html_full = f"""
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <meta charset="utf-8">
-                        <style>
-                            body {{
-                                font-family: Arial, sans-serif;
-                                line-height: 1.6;
-                            }}
-                            pre {{
-                                background: #f4f4f4;
-                                padding: 10px;
-                                border-radius: 5px;
-                            }}
-                        </style>
-                    </head>
-                    <body>
-                        {html_content}
-                    </body>
-                    </html>
-                    """
-        
-                    # Generate PDF from HTML
-                    pdf_bytes = pdfkit.from_string(html_full, False)
-        
-                    # Create a download button for the PDF
-                    st.download_button(
-                        label="Download Aggregated Response as PDF",
-                        data=pdf_bytes,
-                        file_name="aggregated_response.pdf",
-                        mime="application/pdf",
-                    )
-                except Exception as e:
-                    st.error(f"Error generating PDF: {str(e)}")
-
 
 if __name__ == "__main__":
     main()
