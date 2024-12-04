@@ -69,7 +69,7 @@ def query_bot(bot_name, input_prompt,anything_key):
     return {}
 
 # Step 2: Generate Prompts for Each Specialist
-def generate_specialist_prompt(specialty, payload):
+def generate_specialist_prompt(specialty, payload, user_prompt):
     """
     Create a custom prompt for the given specialty based on the input payload.
     """
@@ -81,7 +81,7 @@ def generate_specialist_prompt(specialty, payload):
     - Known allergies: (if applicable)
     
     Task:
-    {payload['User_Prompt']}
+    {user_prompt}
     """
 
 # Step 3: Query a Model
@@ -152,6 +152,7 @@ def main():
     with st.form("input_form"):
         api_key = "EPCJ137-M454740-N6ZJV6H-MA38PA9"
         input_prompt = st.text_area("Enter Medical Condition")
+        user_prompt = st.text_area("Enter user prompt/Task for model")
    
         submitted = st.form_submit_button("Submit")
 
@@ -177,7 +178,7 @@ def main():
         st.write("Fetching responses from specialists...")
         specialist_responses = []
         for specialty in specialists:
-            prompt = generate_specialist_prompt(specialty, input_prompt)
+            prompt = generate_specialist_prompt(specialty, input_prompt,user_prompt)
 
             response = query_model(specialty, prompt, input_prompt, api_key)
             specialist_responses.append({"Specialty": specialty, "Response": response})
