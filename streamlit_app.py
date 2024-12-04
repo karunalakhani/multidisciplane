@@ -123,7 +123,7 @@ def aggregate_responses(responses):
     return aggregated
 
 # Step 5: Generate Final Prompt
-def generate_final_prompt(aggregated_response):
+def generate_final_prompt(aggregated_response,medical_condition):
     """
     Generate a prompt for the final model to create a unified report.
     """
@@ -132,10 +132,10 @@ def generate_final_prompt(aggregated_response):
     )
     return f"""
     Given the following specialist recommendations:
-    {responses_summary}
+    {responses_summary} for the patient with medical condition {medical_condition}
     
     Task:
-    Integrate these into a single, comprehensive medication report as per the initial instructions.
+    Create a single, comprehensive medication report as per the initial instructions.
     """
 
 # Step 6: Output Final Response
@@ -210,7 +210,7 @@ def main():
 
         # Aggregate responses
         aggregated_response = aggregate_responses(specialist_responses)
-        final_prompt = generate_final_prompt(aggregated_response)
+        final_prompt = generate_final_prompt(aggregated_response,input_prompt)
         final_response = query_model("medical-advanced", final_prompt, '',api_key)
         
         # Step 5: Output the final response
