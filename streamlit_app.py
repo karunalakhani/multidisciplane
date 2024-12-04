@@ -158,12 +158,13 @@ def main():
         input_prompt = st.text_area("Enter Medical Condition")
         user_prompt = st.text_area("Enter user prompt/Task for model")
    
-        submitted = st.form_submit_button("Submit")
+        
         if mode == "Static":
             custom_specialties = st.text_area(
                 "Enter a custom list of specialties (comma-separated)"
             )
             specialists = [s.strip() for s in custom_specialties.split(",") if s.strip()]
+        submitted = st.form_submit_button("Submit")
 
     if submitted:
         if not api_key or not input_prompt or not user_prompt:
