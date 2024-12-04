@@ -1,6 +1,10 @@
 import streamlit as st
 import json
 import requests
+import markdown
+import io
+import pdfkit
+
 
 
 medical_specialties = [
@@ -217,15 +221,47 @@ def main():
             st.subheader("Aggregated Response")
 
             st.markdown(final_response)
-
-        # Option to download the aggregated response
-        aggregated_json = json.dumps(final_response, indent=4)
-        st.download_button(
-            label="Download Aggregated Response",
-            data=aggregated_json,
-            file_name="aggregated_response.json",
-            mime="application/json"
-        )
+    
+        # Generate and download PDF
+        if st.button("Download as PDF"):
+            try:
+                # Convert Markdown to HTML
+                html_content = markdown.markdown(final_response)
+                html_full = f"""
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <style>
+                        body {{
+                            font-family: Arial, sans-serif;
+                            line-height: 1.6;
+                        }}
+                        pre {{
+                            background: #f4f4f4;
+                            padding: 10px;
+                            border-radius: 5px;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    {html_content}
+                </body>
+                </html>
+                """
+    
+                # Generate PDF from HTML
+                pdf_bytes = pdfkit.from_string(html_full, False)
+    
+                # Create a download button for the PDF
+                st.download_button(
+                    label="Download Aggregated Response as PDF",
+                    data=pdf_bytes,
+                    file_name="aggregated_response.pdf",
+                    mime="application/pdf",
+                )
+            except Exception as e:
+                st.error(f"Error generating PDF: {str(e)}")
 
 
 if __name__ == "__main__":
