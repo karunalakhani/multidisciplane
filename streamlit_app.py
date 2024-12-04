@@ -198,7 +198,7 @@ def main():
         # Aggregate responses
         aggregated_response = aggregate_responses(specialist_responses)
         final_prompt = generate_final_prompt(aggregated_response)
-        final_response = query_model("medical-advanced", final_prompt, '',anything_key)
+        final_response = query_model("medical-advanced", final_prompt, '',api_key)
         
         # Step 5: Output the final response
         output_response(final_response)
