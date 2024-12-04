@@ -150,6 +150,7 @@ def output_response(response):
 
 def main():
     st.title("Specialty Recommendation and Aggregation App")
+    mode = st.radio("Select Mode", ["Dynamic", "Static"])
 
     # Input form
     with st.form("input_form"):
@@ -158,25 +159,32 @@ def main():
         user_prompt = st.text_area("Enter user prompt/Task for model")
    
         submitted = st.form_submit_button("Submit")
+        if mode == "Static":
+            custom_specialties = st.text_area(
+                "Enter a custom list of specialties (comma-separated)"
+            )
+            specialists = [s.strip() for s in custom_specialties.split(",") if s.strip()]
 
     if submitted:
-        if not api_key or not input_prompt:
+        if not api_key or not input_prompt or not user_prompt:
             st.error("Please fill in all fields.")
             return
 
         st.write("Querying the Determiner Bot...")
-        determiner_response = query_bot("determiner-bot", input_prompt, api_key)
- 
-
-
-        try:
-            determiner_response = json.loads(determiner_response)
-            specialists = determiner_response["Specialists"]
-            st.success(f"Determiner Bot suggested specialties: {specialists}")
-        except json.JSONDecodeError:
-            st.error("Failed to decode the determiner response.")
-            return
-
+        if mode != "Static":
+            determiner_response = query_bot("determiner-bot", input_prompt, api_key)
+     
+    
+    
+            try:
+                determiner_response = json.loads(determiner_response)
+                specialists = determiner_response["Specialists"]
+                st.success(f"Determiner Bot suggested specialties: {specialists}")
+            except json.JSONDecodeError:
+                st.error("Failed to decode the determiner response.")
+                return
+        else:
+            st.success(f"Static flow specialties: {specialists}")
         # Get responses from all specialists
         st.write("Fetching responses from specialists...")
         specialist_responses = []
